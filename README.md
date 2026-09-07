@@ -15,7 +15,7 @@ Mỗi chặng dựng một phần của báo cáo.
 - Chặng 2: Mô tả mẫu — 298 · 293 · 293 · **288** · 10 bạn bị loại
 - Chặng 3: Kết quả — bảng bốn nhóm giờ ngủ kèm n và tỉ lệ
 - Chặng 4: Diễn giải đúng mức — ba loại từ nói quá
-- Chặng 5: Giới hạn của nghiên cứu — bốn giới hạn, trong đó có biến gây nhiễu
+- Chặng 5: Giới hạn của nghiên cứu — bốn giới hạn, trong đó có yếu tố gây nhiễu
 - Kiểm tra cuối: 10 câu ngẫu nhiên rút từ ngân hàng 20 câu **tổng hợp cả năm buổi**
 
 ## Đáp án các chặng (dành cho giáo viên)
