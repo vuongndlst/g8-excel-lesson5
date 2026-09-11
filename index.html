@@ -73,12 +73,11 @@ input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(49,9
 .task input.good{border-color:var(--green);box-shadow:0 0 0 4px rgba(15,157,122,.12)}
 .task input.wrong{border-color:var(--red);box-shadow:0 0 0 4px rgba(180,35,24,.1)}
 .task.miss{border-color:#fecdca;background:#fffbfa}
-.hintFx{display:none;margin-top:8px;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;background:#fff7ed;border:1px solid #fed7aa;color:#8a3c05;border-radius:9px;padding:5px 10px;font-size:12.5px;font-weight:800}
-.task.miss .hintFx{display:inline-block}
-.hintFx::before{content:"Gợi ý: ";font-family:inherit}
 select.selWrong{border-color:var(--red);box-shadow:0 0 0 4px rgba(180,35,24,.1)}
 .hintBtn{background:none;border:0;color:var(--blue);font-size:12px;font-weight:850;cursor:pointer;padding:6px 0}
 .hintBox{font-size:13px;color:#475467;background:#f8fafc;border-radius:11px;padding:10px 12px;margin-top:8px;line-height:1.55}
+.hintLevel+.hintLevel{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+.noCopy{-webkit-user-select:none;user-select:none}
 .dataWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;margin-top:14px}
 .dataTable{width:100%;border-collapse:collapse;min-width:560px;font-size:13.5px}
 .dataTable th,.dataTable td{padding:10px 12px;border-bottom:1px solid #eef0f3;text-align:right}
@@ -128,8 +127,8 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
   <div class="callout blue">
     <strong>Chuẩn bị</strong><br>
-    Vẫn dùng file <span class="fx">LSTS_KhaoSat_K8_2026_AnDanh_Cleaned.xlsx</span>, sheet <span class="fx">Clean_Data</span>,
-    vùng dữ liệu hàng 3 → hàng 300.<br>
+    Dùng file <span class="fx">LSTS_KhaoSat_K8_2026_AnDanh_Cleaned.xlsx</span>, sheet <span class="fx">Clean_Data</span>,
+    vùng dữ liệu hàng 3 → hàng 300. Các phép tính của Bài 5 nằm trong khối yêu cầu cột <span class="fx">M:P</span>; gõ công thức vào ô vàng cùng hàng rồi nhập kết quả lên web. Số trung bình hiển thị 2 chữ số thập phân; tỉ lệ hiển thị dạng phần trăm, nên em nhập đúng số đang thấy trong ô. Có thể dùng <span class="fx">ROUND(kết_quả, 2)</span> nếu muốn, nhưng không bắt buộc.<br>
     Buổi này em <strong>viết một báo cáo hoàn chỉnh</strong> từ những gì đã học ở bốn buổi trước. Mỗi chặng
     dựng một phần của báo cáo đó.
   </div>
@@ -168,7 +167,7 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
     </div>
     <button class="hintBtn" data-hint="hint1">Cần gợi ý?</button>
-    <div class="hintBox hidden" id="hint1">Với mỗi câu, tự hỏi: cả hai thứ cần so sánh có nằm trong 11 cột dữ liệu không, và mẫu của mình có đủ rộng để nói về nhóm người đó không?</div>
+    <div class="hintBox noCopy hidden" id="hint1"><div class="hintLevel hidden"><strong>Gợi ý 1:</strong> Với mỗi câu, kiểm tra xem các biến cần dùng có thật sự nằm trong bảng khảo sát không.</div><div class="hintLevel hidden"><strong>Gợi ý 2:</strong> Nếu câu hỏi yêu cầu giải thích “vì sao”, kết luận nguyên nhân, hoặc nói về một nhóm ngoài mẫu khảo sát thì dữ liệu hiện có chưa đủ để trả lời.</div></div>
     <div class="feedback" id="fb1"></div>
     <div class="btnrow"><button class="btn btnPrimary" id="action1">Kiểm tra</button></div>
   </div>
@@ -184,13 +183,13 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
   <div class="activity">
     <h3>Thử thách 2</h3>
-    <p class="ahint">Làm trên sheet <span class="fx">Clean_Data</span>, vùng hàng 3 → hàng 300.</p>
+    <p class="ahint">Làm tại các dòng Chặng 2 trong khối cột <span class="fx">M:P</span> trên sheet <span class="fx">Clean_Data</span>.</p>
     <div class="taskGrid" id="task2">
-      <div class="task"><div class="q"><b>Tổng số phản hồi trong bảng</b><span class="hintFx">=COUNTA(A3:A300)</span></div><input data-ans="298" data-tol="0" placeholder="kết quả"></div>
-      <div class="task"><div class="q"><b>Số bạn có dữ liệu giờ ngủ</b><span class="hintFx">=COUNT(B3:B300)</span></div><input data-ans="293" data-tol="0" placeholder="kết quả"></div>
-      <div class="task"><div class="q"><b>Số bạn có dữ liệu điểm TB lớp 7</b><span class="hintFx">=COUNT(H3:H300)</span></div><input data-ans="293" data-tol="0" placeholder="kết quả"></div>
-      <div class="task"><div class="q"><b>Số bạn có ĐỦ CẢ HAI dữ liệu</b><span class="hintFx">=COUNTIFS(B3:B300;">=0";H3:H300;">=0")</span></div><input data-ans="288" data-tol="0" placeholder="kết quả"></div>
-      <div class="task"><div class="q"><b>Số bạn bị loại vì thiếu một trong hai</b><span class="hintFx">Lấy tổng số phản hồi trừ số bạn có đủ cả hai</span></div><input data-ans="10" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Tổng số phản hồi trong bảng</b></div><input data-ans="298" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Số bạn có dữ liệu giờ ngủ</b></div><input data-ans="293" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Số bạn có dữ liệu điểm TB lớp 7</b></div><input data-ans="293" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Số bạn có ĐỦ CẢ HAI dữ liệu</b></div><input data-ans="288" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Số bạn bị loại vì thiếu một trong hai</b></div><input data-ans="10" data-tol="0" placeholder="kết quả"></div>
     </div>
     <div class="matchGrid" style="margin-top:14px">
       <div class="term">Nếu báo cáo chỉ ghi “khảo sát 298 học sinh” thì vấn đề là gì?</div>
@@ -198,7 +197,7 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
     </div>
     <button class="hintBtn" data-hint="hint2">Cần gợi ý?</button>
-    <div class="hintBox hidden" id="hint2">Ô thứ tư cần đếm những bạn có dữ liệu ở CẢ HAI cột cùng lúc — một hàm đếm một điều kiện không làm được.</div>
+    <div class="hintBox noCopy hidden" id="hint2"><div class="hintLevel hidden"><strong>Gợi ý 1:</strong> Phân biệt bốn số: tổng phản hồi, số có dữ liệu giờ ngủ, số có dữ liệu điểm, và số có đủ cả hai dữ liệu trên cùng một hàng.</div><div class="hintLevel hidden"><strong>Gợi ý 2:</strong> Ô “đủ cả hai” cần hai điều kiện VÀ trên cột B và H. Số bị loại bằng tổng phản hồi trừ số hàng có đủ cả hai; tự chọn hàm và vùng.</div></div>
     <div class="feedback" id="fb2"></div>
     <div class="btnrow"><button class="btn btnSecondary" id="back2">← Chặng 1</button><button class="btn btnPrimary" id="action2">Kiểm tra</button></div>
   </div>
@@ -208,18 +207,18 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 <section class="section" id="step3">
   <div class="head"><div class="badge">3</div><div><h2>Kết quả</h2><p class="sub">Ghép lại đúng những gì em đã làm quen ở Bài 3 và Bài 4.</p></div></div>
 
-  <div class="callout blue">Chia cột Giờ ngủ thành bốn nhóm: <strong>dưới 6</strong> · <strong>6 đến dưới 7</strong> · <strong>7 đến dưới 8</strong> · <strong>từ 8 trở lên</strong>.<br>Với mỗi nhóm, tính cỡ mẫu và điểm trung bình. Tỉ lệ phần trăm chia cho <strong>288</strong> — mẫu thật sự dùng được, không phải 298.</div>
+  <div class="callout blue">Chia cột Giờ ngủ thành bốn nhóm: <strong>dưới 6</strong> · <strong>6 đến dưới 7</strong> · <strong>7 đến dưới 8</strong> · <strong>từ 8 trở lên</strong>.<br><strong>Cỡ mẫu (n)</strong> là số bạn thật sự góp dữ liệu vào kết quả của từng nhóm. Tìm n theo ba bước: chọn đúng nhóm → bỏ dòng thiếu Giờ ngủ hoặc Điểm TB → đếm số dòng còn lại.<br>Vì vậy tổng cỡ mẫu dùng được là <strong>288</strong>, không phải 298. Tỉ lệ phần trăm của từng nhóm phải chia cho 288.</div>
 
   <div class="callout warn">Vẽ thêm một biểu đồ cột từ bảng đó: trục bắt đầu từ 0, có đủ năm thành phần bắt buộc của Bài 4. Biểu đồ này em nộp cùng bài tập, web không chấm được.</div>
 
   <div class="activity">
     <h3>Thử thách 3</h3>
-    <p class="ahint">Làm trên sheet <span class="fx">Clean_Data</span>, vùng hàng 3 → hàng 300.</p>
+    <p class="ahint">Làm tại các dòng Chặng 3 trong khối cột <span class="fx">M:P</span> trên sheet <span class="fx">Clean_Data</span>, rồi nhập kết quả vào đúng hàng của bảng.</p>
     <div class="taskGrid" id="task3">
-      <div class="task"><div class="q"><b>Nhóm ngủ dưới 6 giờ — cỡ mẫu n</b><span class="hintFx">=COUNTIFS(B3:B300;"<6";H3:H300;">=0")</span></div><input data-ans="30" data-tol="0" placeholder="kết quả"></div>
-      <div class="task"><div class="q"><b>Nhóm ngủ từ 8 giờ trở lên — cỡ mẫu n</b><span class="hintFx">=COUNTIFS(B3:B300;">=8";H3:H300;">=0")</span></div><input data-ans="69" data-tol="0" placeholder="kết quả"></div>
-      <div class="task"><div class="q"><b>Nhóm ngủ từ 8 giờ trở lên — điểm TB</b><span class="hintFx">=AVERAGEIFS(H3:H300;B3:B300;">=8")</span></div><input data-ans="8.36" data-tol="0.04" placeholder="ví dụ: 8.36"></div>
-      <div class="task"><div class="q"><b>Nhóm 7 đến dưới 8 giờ chiếm bao nhiêu phần trăm của 288</b><span class="hintFx">Lấy cỡ mẫu nhóm đó chia cho 288</span></div><input data-ans="38.5" data-tol="0.6" data-ans2="0.385" data-tol2="0.006" placeholder="ví dụ: 38.5"></div>
+      <div class="task"><div class="q"><b>Nhóm ngủ dưới 6 giờ — cỡ mẫu n</b></div><input data-ans="30" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Nhóm ngủ từ 8 giờ trở lên — cỡ mẫu n</b></div><input data-ans="69" data-tol="0" placeholder="kết quả"></div>
+      <div class="task"><div class="q"><b>Nhóm ngủ từ 8 giờ trở lên — điểm TB</b></div><input data-ans="8.36" data-tol="0.04" placeholder="ví dụ: 8.36"></div>
+      <div class="task"><div class="q"><b>Nhóm 7 đến dưới 8 giờ chiếm bao nhiêu phần trăm của 288</b></div><input data-ans="38.5" data-tol="0.6" data-ans2="0.385" data-tol2="0.006" placeholder="ví dụ: 38.5"></div>
     </div>
     <div class="matchGrid" style="margin-top:14px">
       <div class="term">Trong phần Kết quả, có nên viết câu “điều này cho thấy ngủ đủ giúp học tốt hơn” không?</div>
@@ -227,7 +226,7 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
     </div>
     <button class="hintBtn" data-hint="hint3">Cần gợi ý?</button>
-    <div class="hintBox hidden" id="hint3">Tỉ lệ chia cho 288 chứ không chia cho 298 — vì 288 mới là số bạn thật sự nằm trong phép so sánh.</div>
+    <div class="hintBox noCopy hidden" id="hint3"><div class="hintLevel hidden"><strong>Gợi ý 1:</strong> Mỗi nhóm giờ ngủ cần hai số đi cùng nhau: cỡ mẫu n và điểm trung bình. Chỉ đếm những hàng có cả giờ ngủ lẫn điểm.</div><div class="hintLevel hidden"><strong>Gợi ý 2:</strong> Nhóm ngủ ít dùng điều kiện &lt; 6; nhóm ngủ đủ dùng ≥ 8. Khi tính tỉ lệ, mẫu số là 288 vì chỉ 288 bạn có đủ dữ liệu cho phép so sánh.</div></div>
     <div class="feedback" id="fb3"></div>
     <div class="btnrow"><button class="btn btnSecondary" id="back3">← Chặng 2</button><button class="btn btnPrimary" id="action3">Kiểm tra</button></div>
   </div>
@@ -261,7 +260,7 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
     </div>
     <button class="hintBtn" data-hint="hint4">Cần gợi ý?</button>
-    <div class="hintBox hidden" id="hint4">Đọc kỹ ĐỘNG TỪ trong câu. Câu đúng mức thường có cụm “trong mẫu này” và không có từ ra lệnh nào.</div>
+    <div class="hintBox noCopy hidden" id="hint4"><div class="hintLevel hidden"><strong>Gợi ý 1:</strong> Gạch chân động từ trong từng câu và tìm các từ nói quá như “chứng minh”, “làm cho”, “tất cả”.</div><div class="hintLevel hidden"><strong>Gợi ý 2:</strong> Câu diễn giải đúng mức thường giới hạn phạm vi bằng “trong mẫu này” và chỉ nói hai biến có liên quan, không khẳng định nguyên nhân hay ra lời khuyên.</div></div>
     <div class="feedback" id="fb4"></div>
     <div class="btnrow"><button class="btn btnSecondary" id="back4">← Chặng 3</button><button class="btn btnPrimary" id="action4">Kiểm tra</button></div>
   </div>
@@ -275,10 +274,10 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
   <div class="activity">
     <h3>Thử thách 5</h3>
-    <p class="ahint">Làm trên sheet <span class="fx">Clean_Data</span>, vùng hàng 3 → hàng 300.</p>
+    <p class="ahint">Làm tại các dòng Chặng 5 trong khối cột <span class="fx">M:P</span> trên sheet <span class="fx">Clean_Data</span>.</p>
     <div class="taskGrid" id="task5">
-      <div class="task"><div class="q"><b>Giờ dùng thiết bị TB của nhóm ngủ dưới 6 giờ</b><span class="hintFx">=AVERAGEIF(B3:B300;"<6";C3:C300)</span></div><input data-ans="4.65" data-tol="0.04" placeholder="ví dụ: 4.65"></div>
-      <div class="task"><div class="q"><b>Giờ dùng thiết bị TB của nhóm ngủ từ 8 giờ</b><span class="hintFx">=AVERAGEIF(B3:B300;">=8";C3:C300)</span></div><input data-ans="2.26" data-tol="0.04" placeholder="ví dụ: 2.26"></div>
+      <div class="task"><div class="q"><b>Giờ dùng thiết bị TB của nhóm ngủ dưới 6 giờ</b></div><input data-ans="4.65" data-tol="0.04" placeholder="ví dụ: 4.65"></div>
+      <div class="task"><div class="q"><b>Giờ dùng thiết bị TB của nhóm ngủ từ 8 giờ trở lên</b></div><input data-ans="2.26" data-tol="0.04" placeholder="ví dụ: 2.26"></div>
     </div>
     <div class="matchGrid" style="margin-top:14px">
       <div class="term">Hai con số vừa tính thuộc loại giới hạn nào?</div>
@@ -292,7 +291,7 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 
     </div>
     <button class="hintBtn" data-hint="hint5">Cần gợi ý?</button>
-    <div class="hintBox hidden" id="hint5">Hai công thức này giống hệt chặng 2 của Bài 3, chỉ đổi cột lấy giá trị sang cột Giờ dùng thiết bị.</div>
+    <div class="hintBox noCopy hidden" id="hint5"><div class="hintLevel hidden"><strong>Gợi ý 1:</strong> Hai nhóm vẫn do cột Giờ ngủ xác định. Đại lượng cần tính trung bình lần này là Giờ dùng thiết bị.</div><div class="hintLevel hidden"><strong>Gợi ý 2:</strong> Dùng cấu trúc AVERAGEIF khuyết với vùng điều kiện ở cột B và vùng lấy giá trị ở cột C. Tự điền ngưỡng &lt; 6 hoặc ≥ 8 cho đúng tên nhóm.</div></div>
     <div class="feedback" id="fb5"></div>
     <div class="btnrow"><button class="btn btnSecondary" id="back5">← Chặng 4</button><button class="btn btnPrimary" id="action5">Kiểm tra</button></div>
   </div>
@@ -370,8 +369,7 @@ function stageCheck(taskId,selIds,okMsg){
   const parts=[];
   if(!t.ok)parts.push(`${t.wrong} ô kết quả`);
   if(c.wrong)parts.push(`${c.wrong} câu chọn`);
-  const goi = t.ok ? '' : ' Gợi ý đã hiện ra dưới câu hỏi sai.';
-  return{ok:false,msg:`✗ Chỗ tô đỏ chưa đúng (${parts.join(' và ')}).${goi}`};
+  return{ok:false,msg:`✗ Chỗ tô đỏ chưa đúng (${parts.join(' và ')}). Hãy mở Gợi ý 1, thử lại, rồi mới xem Gợi ý 2 nếu vẫn cần.`};
 }
 function selOk(id){const s=document.getElementById(id);return s.value===s.dataset.key}
 function selsFilled(ids){return ids.every(i=>document.getElementById(i).value)}
@@ -403,7 +401,9 @@ document.getElementById('startBtn').onclick=()=>{
   state.student={name,cls};fb.textContent='';showStep(1);
 };
 [['back2',1],['back3',2],['back4',3],['back5',4]].forEach(([id,n])=>{const b=document.getElementById(id);if(b)b.onclick=()=>showStep(n)});
-document.querySelectorAll('.hintBtn').forEach(b=>{b.onclick=()=>{const box=document.getElementById(b.dataset.hint);box.classList.toggle('hidden');b.textContent=box.classList.contains('hidden')?'Cần gợi ý?':'Ẩn gợi ý'}});
+document.querySelectorAll('.hintBtn').forEach(b=>{const box=document.getElementById(b.dataset.hint),levels=[...box.querySelectorAll('.hintLevel')];let level=0;b.onclick=()=>{if(level===0){box.classList.remove('hidden');levels[0]?.classList.remove('hidden');level=1;b.textContent='Xem gợi ý 2'}else if(level===1){levels[1]?.classList.remove('hidden');level=2;b.textContent='Ẩn gợi ý'}else{box.classList.add('hidden');levels.forEach(x=>x.classList.add('hidden'));level=0;b.textContent='Cần gợi ý?'}}});
+document.addEventListener('copy',e=>{const s=window.getSelection(),n=s&&s.anchorNode,el=n&&(n.nodeType===1?n:n.parentElement);if(el&&el.closest('.noCopy'))e.preventDefault()});
+document.addEventListener('contextmenu',e=>{if(e.target.closest('.noCopy'))e.preventDefault()});
 
 function setStageAction(btnId,fbId,nextStep,validator){
   const btn=document.getElementById(btnId),fb=document.getElementById(fbId);
@@ -440,30 +440,32 @@ setStageAction('action5','fb5',6,()=>stageCheck('task5',['why5a','why5b','why5c'
 /* ================= NGÂN HÀNG CÂU HỎI ================= */
 const BANK=[
  {q:'Trước khi tính bất kỳ con số nào, việc đầu tiên phải làm với dữ liệu là gì?',options:[['Kiểm tra và làm sạch dữ liệu','k'],['Vẽ ngay biểu đồ cho trực quan','x'],['Sắp xếp theo thứ tự bảng chữ cái','x'],['Đổi mọi cột chữ thành số','x']]},
- {q:'Một ô số bị lưu dạng văn bản thì hàm AVERAGE xử lý thế nào?',options:[['Bỏ qua ô đó, không đưa vào phép tính','k'],['Vẫn tính bình thường như ô số','x'],['Báo lỗi và dừng toàn bộ công thức','x'],['Tự đổi ô đó thành số rồi tính','x']]},
+ {type:'scenario',q:'Tình huống: Một ô số bị lưu dạng văn bản. Hàm AVERAGE sẽ xử lý ô đó thế nào?',options:[['Bỏ qua ô đó khi tính','k'],['Tính như một ô số bình thường','x'],['Dừng công thức và báo lỗi','x'],['Tự đổi ô đó thành số rồi tính','x']]},
  {q:'Vì sao trung vị mô tả cả nhóm tốt hơn trung bình khi có giá trị cực đoan?',options:[['Vì trung vị là giá trị đứng giữa, không bị kéo theo','k'],['Vì trung vị luôn lớn hơn trung bình cộng','x'],['Vì trung vị bỏ qua các ô trống trong cột','x'],['Vì trung vị được tính trên nhiều người hơn','x']]},
- {q:'AVERAGE bỏ qua ô trống, nên trước khi tính trung bình cần làm gì?',options:[['Chạy COUNT để biết mẫu số thật là bao nhiêu','k'],['Điền số 0 vào tất cả các ô trống','x'],['Xoá hết những dòng có ô trống đi','x'],['Nhân kết quả với tổng số phản hồi','x']]},
+ {type:'scenario',q:'Tình huống: Cột có vài ô trống và em sắp báo cáo giá trị trung bình. Cần kiểm tra gì trước?',options:[['Đếm số ô có dữ liệu để biết cỡ mẫu','k'],['Điền 0 vào mọi ô còn trống','x'],['Xóa tất cả các dòng có ô trống','x'],['Nhân kết quả với tổng số phản hồi','x']]},
  {q:'Muốn đếm số bạn thoả một điều kiện thì dùng hàm nào?',options:[['COUNTIF','k'],['COUNTA','x'],['SUMIF','x'],['MEDIAN','x']]},
  {q:'Điều kiện dạng số trong hàm đếm phải được viết thế nào?',options:[['Đặt trong dấu nháy kép, ví dụ nhỏ hơn 6','k'],['Viết trần không cần dấu nháy nào','x'],['Đặt trong dấu ngoặc đơn của hàm','x'],['Đặt trong dấu ngoặc vuông','x']]},
  {q:'Khác biệt thứ tự đối số giữa AVERAGEIF và AVERAGEIFS là gì?',options:[['AVERAGEIF để vùng tính ở cuối, AVERAGEIFS để ở đầu','k'],['Hai hàm có thứ tự đối số giống hệt nhau','x'],['AVERAGEIFS để vùng tính ở cuối cùng','x'],['AVERAGEIF không có vùng lấy giá trị','x']]},
  {q:'Vì sao bảng so sánh giữa các nhóm luôn phải có cột cỡ mẫu?',options:[['Vì con số của nhóm nhỏ rất dễ thay đổi','k'],['Vì Excel yêu cầu phải có cột đó','x'],['Vì cột đó giúp bảng trông đầy đủ hơn','x'],['Vì cần cột đó để vẽ được biểu đồ','x']]},
- {q:'Hai cột số đi cùng nhau thì cho phép kết luận gì?',options:[['Chỉ biết chúng đi cùng nhau, chưa biết cái nào là nguyên nhân','k'],['Cái xảy ra trước gây ra cái xảy ra sau','x'],['Cái có số lớn hơn là nguyên nhân','x'],['Chắc chắn có quan hệ nhân quả','x']]},
+ {type:'tf',q:'Đúng hay sai: Hai cột số đi cùng nhau là đủ để kết luận một cột gây ra cột còn lại.',options:[['Đúng','x'],['Sai','k']]},
  {q:'Yếu tố thứ ba trong phân tích dữ liệu là gì?',options:[['Một điều khác đi cùng cả hai bên, có thể mới là nguyên nhân thật','k'],['Cột thứ ba từ trái sang của bảng','x'],['Điều kiện thứ ba trong hàm đếm nhiều điều kiện','x'],['Giá trị lớn thứ ba của một cột','x']]},
  {q:'Muốn so sánh kết quả giữa các nhóm thì vẽ loại biểu đồ nào?',options:[['Biểu đồ cột','k'],['Biểu đồ tròn','x'],['Biểu đồ đường','x'],['Biểu đồ phân tán','x']]},
- {q:'Đổi điểm bắt đầu của trục đứng thì điều gì thay đổi?',options:[['Chỉ hình dạng biểu đồ, không con số nào đổi','k'],['Cả dữ liệu gốc lẫn biểu đồ đều đổi','x'],['Excel tính lại trung bình theo trục mới','x'],['Số nhóm trong biểu đồ giảm đi','x']]},
+ {type:'tf',q:'Đúng hay sai: Đổi điểm bắt đầu của trục đứng chỉ đổi cách nhìn biểu đồ, không đổi số liệu gốc.',options:[['Đúng','k'],['Sai','x']]},
  {q:'Khi nào cắt trục đứng là chấp nhận được?',options:[['Khi khác biệt nhỏ nhưng quan trọng và có ghi rõ','k'],['Bất cứ khi nào muốn biểu đồ trông đẹp hơn','x'],['Khi người xem đã biết trước dữ liệu gốc','x'],['Không bao giờ được phép cắt trục','x']]},
  {q:'Năm thành phần bắt buộc của một biểu đồ đọc được gồm những gì?',options:[['Tiêu đề, nhãn hai trục, đơn vị, cỡ mẫu, nguồn','k'],['Màu sắc, đường viền, nền, phông chữ, khung','x'],['Tên người vẽ, ngày vẽ, lớp, trường, môn','x'],['Số cột, số hàng, số màu, số nhãn, số trục','x']]},
  {q:'Một báo cáo phân tích gồm năm phần nào?',options:[['Câu hỏi, mô tả mẫu, kết quả, diễn giải, giới hạn','k'],['Mở bài, thân bài, kết bài, phụ lục, tài liệu','x'],['Dữ liệu, công thức, biểu đồ, màu sắc, chữ ký','x'],['Tên đề tài, người làm, lớp, ngày nộp, điểm số','x']]},
  {q:'Phần mô tả mẫu của báo cáo phải ghi rõ điều gì?',options:[['Bao nhiêu người và bao nhiêu người bị loại','k'],['Bao nhiêu công thức đã dùng để tính','x'],['Bao nhiêu biểu đồ sẽ có trong báo cáo','x'],['Bao nhiêu tiết học đã dùng để làm','x']]},
- {q:'Câu “điều này cho thấy ngủ đủ giúp học tốt hơn” thuộc phần nào?',options:[['Phần diễn giải, không thuộc phần kết quả','k'],['Phần kết quả, ngay dưới bảng số','x'],['Phần mô tả mẫu, ở đầu báo cáo','x'],['Phần câu hỏi nghiên cứu','x']]},
- {q:'Từ nào sau đây là từ nhân quả cần tránh trong phần diễn giải?',options:[['chứng minh','k'],['có liên quan','x'],['trong mẫu này','x'],['đi cùng với','x']]},
+ {type:'scenario',q:'Tình huống: Câu “điều này cho thấy ngủ đủ giúp học tốt hơn” đang được viết vào báo cáo. Câu đó thuộc phần nào?',options:[['Diễn giải, không phải kết quả','k'],['Kết quả, ngay dưới bảng số','x'],['Mô tả mẫu ở đầu báo cáo','x'],['Câu hỏi nghiên cứu ban đầu','x']]},
+ {type:'tf',q:'Đúng hay sai: Từ “chứng minh” phù hợp khi báo cáo một mối liên hệ quan sát được trong khảo sát.',options:[['Đúng','x'],['Sai','k']]},
  {q:'Nên thay cụm “học sinh nói chung” bằng cụm nào?',options:[['trong mẫu được khảo sát','k'],['toàn bộ học sinh cả nước','x'],['tất cả các bạn cùng tuổi','x'],['mọi người ở lứa tuổi này','x']]},
- {q:'Vì sao một báo cáo có phần giới hạn lại đáng tin hơn?',options:[['Vì nó cho thấy tác giả hiểu công việc của mình tới đâu','k'],['Vì nó dài hơn nên trông công phu hơn','x'],['Vì giáo viên yêu cầu phải có phần đó','x'],['Vì nó giúp che đi phần kết quả yếu','x']]}
+ {type:'scenario',q:'Tình huống: Hai báo cáo có cùng kết quả, nhưng một báo cáo nêu rõ giới hạn. Vì sao báo cáo đó đáng tin hơn?',options:[['Tác giả cho thấy mình hiểu phạm vi kết luận','k'],['Báo cáo dài hơn nên chắc chắn tốt hơn','x'],['Phần giới hạn giúp che kết quả chưa đẹp','x'],['Giáo viên luôn cộng điểm cho đoạn dài','x']]}
 ];
 
 /* ================= BÀI KIỂM TRA ================= */
+function answerLengthBalanced(q){if(!q.options||q.options.length<=2)return true;const lens=q.options.map(([text])=>text.length),correct=q.options.findIndex(([,key])=>key==='k'),max=Math.max(...lens);return !(lens[correct]===max&&lens.filter(n=>n===max).length===1)}
+function buildQuizSet(){const chosen=[],take=(pool,n)=>shuffle(pool.filter(q=>!chosen.includes(q))).slice(0,Math.max(0,n)).forEach(q=>chosen.push(q));take(BANK.filter(q=>q.type==='tf'),2);take(BANK.filter(q=>q.type==='scenario'&&answerLengthBalanced(q)),2);take(BANK.filter(q=>q.type==='scenario'),2-chosen.filter(q=>q.type==='scenario').length);take(BANK.filter(answerLengthBalanced),10-chosen.length);take(BANK,10-chosen.length);return shuffle(chosen)}
 function startQuiz(){
-  state.quizSet=shuffle(BANK).slice(0,10);state.quizIndex=0;state.answers=[];state.quizChecked=false;
+  state.quizSet=buildQuizSet();state.quizIndex=0;state.answers=[];state.quizChecked=false;
   document.getElementById('resultArea').classList.add('hidden');
   document.getElementById('quizArea').classList.remove('hidden');
   renderQ();
@@ -472,7 +474,8 @@ function renderQ(){
   const q=state.quizSet[state.quizIndex];
   q._opts=shuffle(q.options);
   state.quizChecked=false;
-  document.getElementById('qnum').textContent=`Câu ${state.quizIndex+1}/10`;
+  const kind=q.type==='tf'?'Đúng / Sai':q.type==='scenario'?'Tình huống':'Trắc nghiệm';
+  document.getElementById('qnum').textContent=`Câu ${state.quizIndex+1}/10 · ${kind}`;
   document.getElementById('qtext').textContent=q.q;
   const body=document.getElementById('qbody');body.innerHTML='';
   const fb=document.getElementById('qfeedback');fb.className='feedback hidden';fb.innerHTML='';
