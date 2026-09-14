@@ -105,13 +105,17 @@ select.selWrong{border-color:var(--red);box-shadow:0 0 0 4px rgba(180,35,24,.1)}
 .shot{display:block;width:100%;max-width:820px;margin:14px auto 0;border:1px solid var(--line);border-radius:16px}
 footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 @media(max-width:760px){.grid2,.grid3,.formGrid,.matchGrid,.task{grid-template-columns:1fr}.section{padding:20px}}
+.resetBtn{margin-left:10px;border:1px solid var(--line);background:#fff;color:var(--muted);
+border-radius:999px;padding:3px 11px;font-family:inherit;font-size:12px;font-weight:750;cursor:pointer}
+.resetBtn:hover{border-color:var(--red);color:var(--red)}
+.savedNote{color:var(--muted);font-size:12px;font-weight:700}
 </style>
 </head>
 <body>
 <div class="top"><div class="wrap topin">
   <div class="brand"><div class="logo">▦</div><div>Kết luận thổi phồng · Báo cáo phân tích</div></div>
   <div class="pbar"><div class="pfill" id="pfill"></div></div>
-  <div class="pmeta"><span id="plabel">Bắt đầu</span><span id="miniStudent">Chưa nhập thông tin</span></div>
+  <div class="pmeta"><span class="savedNote" id="savedNote"></span><span id="plabel">Bắt đầu</span><span id="miniStudent">Chưa nhập thông tin</span><button id="resetBtn" class="resetBtn" type="button" title="Xoá toàn bộ bài làm đang lưu trên máy này">Xoá bài làm</button></div>
 </div></div>
 
 <main class="wrap">
@@ -280,13 +284,13 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
       <div class="task"><div class="q"><b>Giờ dùng thiết bị TB của nhóm ngủ từ 8 giờ trở lên</b></div><input data-ans="2.26" data-tol="0.04" placeholder="ví dụ: 2.26"></div>
     </div>
     <div class="matchGrid" style="margin-top:14px">
-      <div class="term">Hai con số vừa tính thuộc loại giới hạn nào?</div>
+      <div class="term">Nhóm ngủ ít dùng thiết bị nhiều hơn hẳn nhóm ngủ đủ. Đó là loại giới hạn nào?</div>
       <select id="why5a" data-key="d"><option value="">Chọn...</option><option value="a">Giới hạn tự khai</option><option value="b">Giới hạn một thời điểm</option><option value="c">Giới hạn thiếu dữ liệu</option><option value="d">Giới hạn yếu tố gây nhiễu</option></select>
 
       <div class="term">“Không ai đo giờ ngủ thật, các bạn tự nhớ và tự ghi” là giới hạn nào?</div>
       <select id="why5b" data-key="a"><option value="">Chọn...</option><option value="a">Giới hạn tự khai</option><option value="b">Giới hạn một thời điểm</option><option value="c">Giới hạn thiếu dữ liệu</option><option value="d">Giới hạn yếu tố gây nhiễu</option></select>
 
-      <div class="term">Viết phần giới hạn vào báo cáo thì điều gì xảy ra?</div>
+      <div class="term">Khi một báo cáo có viết phần giới hạn, người đọc sẽ đánh giá thế nào?</div>
       <select id="why5c" data-key="b"><option value="">Chọn...</option><option value="a">Báo cáo bị coi là yếu vì tự nhận điểm dở</option><option value="b">Người đọc có kinh nghiệm tin báo cáo hơn, vì thấy tác giả hiểu việc mình làm</option><option value="c">Không ảnh hưởng gì, chỉ là phần cho dài bài</option><option value="d">Phải bỏ bớt phần Kết quả để có chỗ</option></select>
 
     </div>
@@ -316,6 +320,60 @@ footer{padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 <script>
 /* ================= STATE ================= */
 const state={step:0,student:{name:'',cls:''},quizSet:[],quizIndex:0,answers:[],quizChecked:false,score:0,code:''};
+
+/* ================= LƯU BÀI LÀM TRÊN MÁY ================= */
+const WKEY='excelReport5StudentWork';
+const wIn=()=>[...document.querySelectorAll('.section input[data-ans]')];
+const wSel=()=>[...document.querySelectorAll('.section select[data-key]')];
+const wZone=()=>[...document.querySelectorAll('.dropzone')];
+const wBtn=()=>[...document.querySelectorAll('.section [id^="action"]')];
+const wSig=()=>wIn().length+'-'+wSel().length+'-'+wZone().length+'-'+wBtn().length;
+function saveWork(){
+  try{
+    localStorage.setItem(WKEY,JSON.stringify({
+      v:3,sig:wSig(),student:state.student,step:state.step,
+      inputs:wIn().map(i=>i.value),
+      sels:wSel().map(s=>s.value),
+      zones:wZone().map(z=>[...z.querySelectorAll('.dragCard')].map(c=>c.textContent)),
+      btns:wBtn().map(b=>({p:b.dataset.passed==='1',t:b.textContent,c:b.className}))
+    }));
+    const n=document.getElementById('savedNote');
+    if(n){n.textContent='Đã lưu trên máy này';clearTimeout(window.__sv);
+      window.__sv=setTimeout(()=>{n.textContent=''},1600)}
+  }catch(e){}
+}
+function clearWork(){
+  try{localStorage.removeItem(WKEY);localStorage.removeItem('excelReport5Student')}catch(e){}
+  location.reload();
+}
+function restoreWork(){
+  let d=null;
+  try{d=JSON.parse(localStorage.getItem(WKEY)||'null')}catch(e){}
+  if(!d||d.v!==3||d.sig!==wSig())return;
+  if(d.student&&d.student.name){
+    state.student=d.student;
+    const n=document.getElementById('studentName'),c=document.getElementById('studentClass');
+    if(n)n.value=d.student.name;
+    if(c)c.value=d.student.cls;
+  }
+  wIn().forEach((i,k)=>{if(d.inputs&&d.inputs[k])i.value=d.inputs[k]});
+  wSel().forEach((s,k)=>{if(d.sels&&d.sels[k])s.value=d.sels[k]});
+  if(d.zones)wZone().forEach((z,k)=>{(d.zones[k]||[]).forEach(t=>{
+    const card=[...document.querySelectorAll('.dragCard')].find(x=>x.textContent===t);
+    if(card)z.appendChild(card)})});
+  if(d.btns)wBtn().forEach((b,k)=>{const m=d.btns[k];
+    if(m&&m.p){b.dataset.passed='1';b.textContent=m.t;b.className=m.c}});
+  const buoc=Math.min(d.step||0,5);
+  if(buoc>0&&state.student.name)showStep(buoc);else updateProgress();
+}
+document.addEventListener('input',e=>{if(e.target.closest('.section'))saveWork()});
+document.addEventListener('change',e=>{if(e.target.closest('.section'))saveWork()});
+document.addEventListener('DOMContentLoaded',()=>{
+  const b=document.getElementById('resetBtn');
+  if(b)b.onclick=()=>{if(confirm('Xoá toàn bộ bài làm đang lưu trên máy này?\n'+
+    'Dùng khi máy này chuyển sang cho lớp khác. Đã xoá là không lấy lại được.'))clearWork()};
+});
+
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const shuffle=a=>{const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x};
 
@@ -390,7 +448,7 @@ function showStep(n){
   document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
   document.getElementById('step'+n).classList.add('active');
   state.step=n;updateProgress();window.scrollTo({top:0,behavior:'smooth'});
-  try{localStorage.setItem('excelReport5Student',JSON.stringify(state.student))}catch(e){}
+  saveWork();
   if(n===6)startQuiz();
 }
 document.getElementById('startBtn').onclick=()=>{
@@ -414,7 +472,7 @@ function setStageAction(btnId,fbId,nextStep,validator){
     if(r.ok){
       fb.className='feedback ok';
       fb.textContent=r.msg||'✓ Chính xác. Chặng tiếp theo đã mở.';
-      btn.dataset.passed='1';btn.textContent='Tiếp tục →';btn.className='btn btnGreen';
+      btn.dataset.passed='1';btn.textContent='Tiếp tục →';btn.className='btn btnGreen';saveWork();
     }else{
       fb.className='feedback bad';fb.textContent=r.msg;
     }
@@ -566,6 +624,6 @@ function downloadPDF(){drawCert();if(!window.jspdf){alert('Không tải được
 /* ================= KHỞI ĐỘNG ================= */
 document.querySelectorAll('#why1,#why2,#why2b,#why3,#why4,#why4b,#why5,#why5b').forEach(shuffleSelectOptions);
 try{const s=JSON.parse(localStorage.getItem('excelReport5Student')||'null');if(s&&s.name){document.getElementById('studentName').value=s.name;const sel=document.getElementById('studentClass');if([...sel.options].some(o=>o.value===s.cls)){state.student=s;sel.value=s.cls}}}catch(e){}
-updateProgress();
+updateProgress();restoreWork();
 </script>
 </body></html>
